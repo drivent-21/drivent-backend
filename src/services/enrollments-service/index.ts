@@ -68,7 +68,7 @@ async function createOrUpdateEnrollmentWithAddress(params: CreateOrUpdateEnrollm
 function getAddressForUpsert(address: CreateAddressParams) {
   return {
     ...address,
-    ...(address?.addressDetail && { addressDetail: address.addressDetail }),
+    ...(address.addressDetail && { addressDetail: address.addressDetail }),
   };
 }
 
