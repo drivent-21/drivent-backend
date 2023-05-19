@@ -13,6 +13,21 @@ export async function getTicketTypes(req: AuthenticatedRequest, res: Response, n
   }
 }
 
+export async function createOrUpdateTicketType(
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<Response> {
+  const { name, price, isRemote, includesHotel, ticketTypeId } = req.body;
+
+  try {
+    const ticketType = await ticketService.createOrUpdateTicketType(name, price, isRemote, includesHotel, ticketTypeId);
+    return res.sendStatus(httpStatus.OK).send(ticketType);
+  } catch (e) {
+    next(e);
+  }
+}
+
 export async function getTickets(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<Response> {
   const { userId } = req;
 

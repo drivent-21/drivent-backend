@@ -4,6 +4,25 @@ import enrollmentRepository from '@/repositories/enrollment-repository';
 import ticketsRepository from '@/repositories/tickets-repository';
 import { CreateTicketParams } from '@/protocols';
 
+async function createOrUpdateTicketType(
+  name: string,
+  price: number,
+  isRemote: boolean,
+  includesHotel: boolean,
+  ticketTypeId: any,
+): Promise<number> {
+  const ticketTypeIdRes = await ticketsRepository.createOrUpdateTicketType(
+    name,
+    price,
+    isRemote,
+    includesHotel,
+    ticketTypeId,
+  );
+  if (!ticketTypeIdRes) throw notFoundError();
+
+  return ticketTypeIdRes;
+}
+
 async function getTicketType(): Promise<TicketType[]> {
   const ticketTypes: TicketType[] = await ticketsRepository.findTicketTypes();
   if (!ticketTypes) throw notFoundError();
@@ -38,6 +57,6 @@ async function createTicket(userId: number, ticketTypeId: number): Promise<Ticke
   return ticket;
 }
 
-const ticketService = { getTicketType, getTicketByUserId, createTicket };
+const ticketService = { getTicketType, getTicketByUserId, createTicket, createOrUpdateTicketType };
 
 export default ticketService;

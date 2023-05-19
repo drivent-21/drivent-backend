@@ -2,6 +2,40 @@ import { Ticket, TicketStatus, TicketType } from '@prisma/client';
 import { prisma } from '@/config';
 import { CreateTicketParams } from '@/protocols';
 
+async function createOrUpdateTicketType(
+  name: string,
+  price: number,
+  isRemote: boolean,
+  includesHotel: boolean,
+  ticketTypeId: any,
+): Promise<number> {
+  let ticketType = null;
+
+  !ticketTypeId
+    ? (ticketType = await prisma.ticketType.create({
+        data: {
+          name,
+          price,
+          isRemote,
+          includesHotel,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      }))
+    : (ticketType = await prisma.ticketType.update({
+        where: ticketTypeId,
+        data: {
+          name,
+          price,
+          isRemote,
+          includesHotel,
+          updatedAt: new Date(),
+        },
+      }));
+
+  return ticketType.id;
+}
+
 async function findTicketTypes(): Promise<TicketType[]> {
   return prisma.ticketType.findMany();
 }
@@ -65,4 +99,5 @@ export default {
   findTickeyById,
   findTickeWithTypeById,
   ticketProcessPayment,
+  createOrUpdateTicketType,
 };
