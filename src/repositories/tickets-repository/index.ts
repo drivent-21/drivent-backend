@@ -1,38 +1,45 @@
+/* eslint-disable import/no-unresolved */
 import { Ticket, TicketStatus, TicketType } from '@prisma/client';
 import { prisma } from '@/config';
 import { CreateTicketParams } from '@/protocols';
 
-async function createOrUpdateTicketType(
+async function upsertTicketType(
   name: string,
   price: number,
   isRemote: boolean,
   includesHotel: boolean,
   ticketTypeId: any,
 ): Promise<number> {
-  let ticketType = null;
-
-  !ticketTypeId
-    ? (ticketType = await prisma.ticketType.create({
+  if (!ticketTypeId)
+    return prisma.ticketType
+      .create({
         data: {
           name,
           price,
           isRemote,
           includesHotel,
-          createdAt: new Date(),
-          updatedAt: new Date(),
         },
-      }))
-    : (ticketType = await prisma.ticketType.update({
-        where: ticketTypeId,
-        data: {
-          name,
-          price,
-          isRemote,
-          includesHotel,
-          updatedAt: new Date(),
-        },
-      }));
+      })
+      .then((ticketType) => ticketType.id);
 
+  const ticketType = await prisma.ticketType.upsert({
+    where: {
+      id: ticketTypeId,
+    },
+    create: {
+      name,
+      price,
+      isRemote,
+      includesHotel,
+    },
+    update: {
+      name,
+      price,
+      isRemote,
+      includesHotel,
+    },
+  });
+  console.log(ticketType);
   return ticketType.id;
 }
 
@@ -99,5 +106,5 @@ export default {
   findTickeyById,
   findTickeWithTypeById,
   ticketProcessPayment,
-  createOrUpdateTicketType,
+  upsertTicketType,
 };

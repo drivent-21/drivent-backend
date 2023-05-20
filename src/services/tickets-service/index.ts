@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import { Ticket, TicketStatus, TicketType } from '@prisma/client';
 import { notFoundError } from '@/errors';
 import enrollmentRepository from '@/repositories/enrollment-repository';
@@ -11,14 +12,7 @@ async function createOrUpdateTicketType(
   includesHotel: boolean,
   ticketTypeId: any,
 ): Promise<number> {
-  const ticketTypeIdRes = await ticketsRepository.createOrUpdateTicketType(
-    name,
-    price,
-    isRemote,
-    includesHotel,
-    ticketTypeId,
-  );
-  if (!ticketTypeIdRes) throw notFoundError();
+  const ticketTypeIdRes = await ticketsRepository.upsertTicketType(name, price, isRemote, includesHotel, ticketTypeId);
 
   return ticketTypeIdRes;
 }

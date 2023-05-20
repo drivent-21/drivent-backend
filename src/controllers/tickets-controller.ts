@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import { NextFunction, Response } from 'express';
 import httpStatus from 'http-status';
 import { AuthenticatedRequest } from '@/middlewares';
@@ -19,10 +20,11 @@ export async function createOrUpdateTicketType(
   next: NextFunction,
 ): Promise<Response> {
   const { name, price, isRemote, includesHotel, ticketTypeId } = req.body;
-
+  console.log(ticketTypeId);
   try {
     const ticketType = await ticketService.createOrUpdateTicketType(name, price, isRemote, includesHotel, ticketTypeId);
-    return res.sendStatus(httpStatus.OK).send(ticketType);
+
+    return res.status(httpStatus.OK).send({ id: ticketType });
   } catch (e) {
     next(e);
   }
