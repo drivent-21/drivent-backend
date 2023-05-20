@@ -11,5 +11,5 @@ export const ticketTypeSchema = Joi.object({
   price: Joi.number().required(),
   isRemote: Joi.boolean().required(),
   includesHotel: Joi.boolean().required(),
-  ticketTypeId: Joi.number(),
+  ticketTypeId: Joi.number().allow(null),
 });
