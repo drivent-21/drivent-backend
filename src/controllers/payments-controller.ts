@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import { Response } from 'express';
 import httpStatus from 'http-status';
 import { AuthenticatedRequest } from '@/middlewares';
