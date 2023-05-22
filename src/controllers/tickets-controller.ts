@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import { NextFunction, Response } from 'express';
 import httpStatus from 'http-status';
 import { AuthenticatedRequest } from '@/middlewares';
@@ -8,6 +9,22 @@ export async function getTicketTypes(req: AuthenticatedRequest, res: Response, n
   try {
     const ticketTypes = await ticketService.getTicketType();
     return res.status(httpStatus.OK).send(ticketTypes);
+  } catch (e) {
+    next(e);
+  }
+}
+
+export async function createOrUpdateTicketType(
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<Response> {
+  const { name, price, isRemote, includesHotel, ticketTypeId } = req.body;
+  console.log(ticketTypeId);
+  try {
+    const ticketType = await ticketService.createOrUpdateTicketType(name, price, isRemote, includesHotel, ticketTypeId);
+
+    return res.status(httpStatus.OK).send({ id: ticketType });
   } catch (e) {
     next(e);
   }

@@ -1,8 +1,21 @@
+/* eslint-disable import/no-unresolved */
 import { Ticket, TicketStatus, TicketType } from '@prisma/client';
 import { notFoundError } from '@/errors';
 import enrollmentRepository from '@/repositories/enrollment-repository';
 import ticketsRepository from '@/repositories/tickets-repository';
 import { CreateTicketParams } from '@/protocols';
+
+async function createOrUpdateTicketType(
+  name: string,
+  price: number,
+  isRemote: boolean,
+  includesHotel: boolean,
+  ticketTypeId: any,
+): Promise<number> {
+  const ticketTypeIdRes = await ticketsRepository.upsertTicketType(name, price, isRemote, includesHotel, ticketTypeId);
+
+  return ticketTypeIdRes;
+}
 
 async function getTicketType(): Promise<TicketType[]> {
   const ticketTypes: TicketType[] = await ticketsRepository.findTicketTypes();
@@ -38,6 +51,6 @@ async function createTicket(userId: number, ticketTypeId: number): Promise<Ticke
   return ticket;
 }
 
-const ticketService = { getTicketType, getTicketByUserId, createTicket };
+const ticketService = { getTicketType, getTicketByUserId, createTicket, createOrUpdateTicketType };
 
 export default ticketService;

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import { notFoundError, unauthorizedError } from '@/errors';
 import { CardPaymentParams, PaymentParams } from '@/protocols';
 import enrollmentRepository from '@/repositories/enrollment-repository';

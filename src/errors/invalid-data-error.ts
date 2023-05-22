@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import { ApplicationError } from '@/protocols';
 
 export function invalidDataError(details: string[]): ApplicationInvalidateDataError {
