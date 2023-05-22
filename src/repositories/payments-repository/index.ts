@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import { prisma } from '@/config';
 import { PaymentParams } from '@/protocols';
 
